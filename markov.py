@@ -18,7 +18,9 @@ class Markov:
       sentences = line.split('.')
       for s in sentences:
         words = [pattern.sub('', word).strip() for word in s.split(' ')]
-        self.start_words.append(words[0])
+        words = [w for w in words if len(w) > 0]
+        if len(words) > 0:
+          self.start_words.append(words[0])
 
         for i in range(len(words)-1):
           cur_word = words[i].lower()
@@ -36,6 +38,7 @@ class Markov:
       try:
         nxt_word = random.choice(self.chain[cur_word])
       except KeyError:
+        output[-1] += '.'
         nxt_word = random.choice(self.start_words)
       output.append(nxt_word)
       cur_word = nxt_word.lower()
